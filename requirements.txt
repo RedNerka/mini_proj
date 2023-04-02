@@ -1,0 +1,5 @@
+wave
+streamlit
+streamlit-chat
+extra_streamlit_components
+openai
