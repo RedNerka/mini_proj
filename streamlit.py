@@ -2,8 +2,6 @@
 SI568 Mini Project
 uniqname: wushiyu
 In order to run the script, please run "pip install -r requirements.txt" first and run "streamlit run streamlit.py".
-Note that you need an OpenAI API authentication key to run this code successfully
-Create a Python script named apiKey and an object within it with the key.
 '''
 
 import wave
@@ -109,7 +107,18 @@ def chat(key, message):
     openai.api_key = key
     response = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
-        messages=chat_history,
+        # Provide necessary prompts so the chatbot can react as an assistant
+        # detective.
+        messages=[{'role': 'user', 'content': 'Let us play a detective game!'},
+                  {'role': 'assistant',
+                   'content': 'Great idea! I am ready to play. What is the game about?'},
+                  {'role': 'user', 'content': 'I will give you some information about the criminal\'s\
+                    appearance provided by the witnesses. \
+                   Your job is to request any detail you need to make a sketch of the criminal. \
+                   After this, your job is to provide a summarize of all gathered information.'},
+                  {'role': 'assistant', 'content': 'Sounds like a fun challenge! Let us get started. \
+                    What information do you have about the criminal\'s appearance?'}]
+        + chat_history,
         top_p=0.5
     )
     # Append the response to the chat history to make a complete conversation
@@ -142,7 +151,8 @@ def image(text, key, ph):
     openai.api_key = key
     ph.write('generating image...')
     response = openai.Image.create(
-        prompt=text,
+        # Provide prompts so the AI generates a sketch of the suspect.
+        prompt='Please give me a criminal sketch. ' + text,
         n=1,
         size="512x512"
     )
@@ -240,7 +250,7 @@ def tab1():
     '''
     The procedure executes the script when tab1 is selected.
     '''
-    st.title('Chat with your assistant')
+    st.title('Chat with your assistant detective')
     # If button is clicked, history will be cleared
     # NOTICE: if the button is clicked when chatbox is filled and waiting to
     # be submitted, the texts in the chatbox will still be treated as submit
@@ -270,16 +280,16 @@ def tab2():
     '''
     The procedure executes the script when tab2 is selected.
     '''
-    st.title("Image generation")
-    st.write('Example: The suspect was a six-feet tall white male with brown hair, high forehead, green eyes, big nose, thin mouth and a large jaw.')
+    st.title("Suspect sketch generation")
+    st.write('Example: The suspect was a seven-feet tall male wearing a black hoodie with brown hair, black eyes, and a knife scar across the right eye.')
     st.write('The program currently supports an audio under 30 seconds.')
     # build a sidebar and put the recorder component in the sidebar
     with st.sidebar:
-        st.title('Record here')
+        st.title('Record audio here')
         st.write(
             'Click Start Recording and then click Stop to initialize the recorder.')
         st.write(
-            'After initialization, click Start Recording to record. Click Dtop to stop recording.')
+            'After initialization, click Start Recording to record. Click Stop to stop recording.')
         st.write(
             'Click reset to clear the recorded audio. Click Download to download the recorded audio.')
         # record real-time audio
@@ -303,8 +313,8 @@ if __name__ == '__main__':
     # Build a tab bar and store the current tab
     chosen_id = stx.tab_bar(data=[
                             stx.TabBarItemData(
-                                id="tab1", title="Chat", description="Chat with chatbot"),
-                            stx.TabBarItemData(id="tab2", title="Image generation", description="Voice to image")],
+                                id="tab1", title="Chat", description="Chat with your assistant detective"),
+                            stx.TabBarItemData(id="tab2", title="Sketch generation", description="Voice to suspect sketch")],
                             default='tab1')
     # If current tab is tab1, execute chat
     if chosen_id == 'tab1':
