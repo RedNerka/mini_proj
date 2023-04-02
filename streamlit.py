@@ -2,6 +2,8 @@
 SI568 Mini Project
 uniqname: wushiyu
 In order to run the script, please run "pip install -r requirements.txt" first and run "streamlit run streamlit.py".
+Note that you need an OpenAI API authentication key to run this code successfully
+Create a Python script named apiKey and an object within it with the key.
 '''
 
 import wave
