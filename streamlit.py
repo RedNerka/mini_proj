@@ -287,7 +287,9 @@ def tab2():
     with st.sidebar:
         st.title('Record audio here')
         st.write(
-            'Click Start Recording and then click Stop to initialize the recorder.')
+            'For Mac, click Start Recording to record audio and click Stop to stop recording.')
+        st.write(
+            'For Windows, click Start Recording and then click Stop to initialize the recorder.')
         st.write(
             'After initialization, click Start Recording to record. Click Stop to stop recording.')
         st.write(
